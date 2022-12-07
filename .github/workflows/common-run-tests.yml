@@ -33,6 +33,9 @@ jobs:
         uses: php-actions/composer@v6
         with:
           args: -d ./src
+          php_version: "8.1"
+          php_extensions: sockets
+          version: 2.x
 
       - name: Bolide setup up
         run: ./src/artisan bolide:setup

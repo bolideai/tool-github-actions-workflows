@@ -34,7 +34,7 @@ jobs:
         with:
           args: -d ./src
           php_version: "8.1"
-          php_extensions: sockets,pcntl
+          php_extensions: sockets pcntl
           version: 2.x
 
       - name: Bolide setup up

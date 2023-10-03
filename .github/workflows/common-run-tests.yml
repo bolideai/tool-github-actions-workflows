@@ -38,7 +38,7 @@ jobs:
           version: 2.x
 
       - name: Bolide setup up
-        run: cd src && docker network create bolide && docker-compose run composer chmod -R 777 storage && docker-compose run composer chmod -R 777 bootstrap/cache && docker-compose run composer i --ignore-platform-reqs && docker-compose run artisan migrate --seed && docker-compose run artisan storage:link
+        run: docker network create bolide && docker-compose run composer chmod -R 777 storage && docker-compose run composer chmod -R 777 bootstrap/cache && docker-compose run composer i --ignore-platform-reqs && docker-compose run artisan migrate --seed && docker-compose run artisan storage:link
 
       - name: Execute tests via artisan
-        run: cd src && docker-compose run artisan test
+        run: docker-compose run artisan test

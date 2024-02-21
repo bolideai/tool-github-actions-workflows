@@ -8,51 +8,51 @@ on:
       ACTIONS_DEPLOY_KEY_FOR_TESTS_REPORTS:
         required: true
 
-jobs:
-  generate:
-    runs-on: ubuntu-latest
+# jobs:
+#   generate:
+#     runs-on: ubuntu-latest
 
-    steps:
-      - name: Check Out Repo
-        uses: actions/checkout@v2
+#     steps:
+#       - name: Check Out Repo
+#         uses: actions/checkout@v2
 
-      - name: Cache vendor
-        uses: actions/cache@v3
-        with:
-          key: ${{ hashFiles('./src/composer.lock') }}
-          path: |
-            ./src/vendor
+#       - name: Cache vendor
+#         uses: actions/cache@v3
+#         with:
+#           key: ${{ hashFiles('./src/composer.lock') }}
+#           path: |
+#             ./src/vendor
 
-      - name: Cache Composer dependencies
-        uses: actions/cache@v3
-        with:
-          path: /tmp/composer-cache
-          key: ${{ runner.os }}-${{ hashFiles('./src/composer.lock') }}
+#       - name: Cache Composer dependencies
+#         uses: actions/cache@v3
+#         with:
+#           path: /tmp/composer-cache
+#           key: ${{ runner.os }}-${{ hashFiles('./src/composer.lock') }}
 
-      - name: Composer install
-        env:
-          COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.PAT }}"} }'
-        uses: php-actions/composer@v6
-        with:
-          args: -d ./src
-          php_version: "8.1"
-          php_extensions: sockets pcntl redis gd zip
-          version: 2.x
+#       - name: Composer install
+#         env:
+#           COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ secrets.PAT }}"} }'
+#         uses: php-actions/composer@v6
+#         with:
+#           args: -d ./src
+#           php_version: "8.1"
+#           php_extensions: sockets pcntl redis gd zip
+#           version: 2.x
 
-      - name: Bolide setup up
-        run: ./src/artisan bolide:setup
+#       - name: Bolide setup up
+#         run: ./src/artisan bolide:setup
 
-      - name: Run tests with coverage
-        run: |
-          docker-compose run artisan-coverage
-          mkdir /tmp/reports && cp ./src/tests/clover.xml /tmp/reports/${{ github.event.repository.name }}.xml
+#       - name: Run tests with coverage
+#         run: |
+#           docker-compose run artisan-coverage
+#           mkdir /tmp/reports && cp ./src/tests/clover.xml /tmp/reports/${{ github.event.repository.name }}.xml
 
-      - name: Publish coverage report
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY_FOR_TESTS_REPORTS }}
-          external_repository: bolideai/tool-tests-coverage-reports
-          publish_branch: main
-          publish_dir: /tmp/reports
-          destination_dir: ./reports
-          keep_files: true
+#       - name: Publish coverage report
+#         uses: peaceiris/actions-gh-pages@v3
+#         with:
+#           deploy_key: ${{ secrets.ACTIONS_DEPLOY_KEY_FOR_TESTS_REPORTS }}
+#           external_repository: bolideai/tool-tests-coverage-reports
+#           publish_branch: main
+#           publish_dir: /tmp/reports
+#           destination_dir: ./reports
+#           keep_files: true
